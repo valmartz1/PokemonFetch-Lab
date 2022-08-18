@@ -36,7 +36,12 @@ let ninthURL = 'https://pokeapi.co/api/v2/pokemon/9/'
 let blastoise = null;
 let imageBlastoise;
 
+let pokes = [];
+let pokeImgs = [];
 
+let namep = 'Name: ';
+let weight = 'Weight: ';
+let abilities = 'Abilities:';
 
 
 function setup() {
@@ -48,13 +53,14 @@ function setup() {
     canvas.style('right', '0');
 
     //1
-    console.log(fetch(firstURL).then(response => response.json()));
     fetch(firstURL)
       .then(response => response.json())
       .then(data => {
         bulbasaur = data
-        imageBulbasaur = loadImage(bulbasaur.sprites.front_default)
-        console.log(bulbasaur.name);
+        imageBulbasaur = loadImage(bulbasaur.sprites.front_default);
+        
+        pokes.push(bulbasaur);
+        pokeImgs.push(imageBulbasaur);
     });
 
     //2 
@@ -63,8 +69,10 @@ function setup() {
       .then(response => response.json())
       .then(data => {
         ivisaur = data
-        imageIvisaur = loadImage(ivisaur.sprites.front_default)
-        console.log(ivisaur.name);
+        imageIvisaur = loadImage(ivisaur.sprites.front_default);
+
+        pokes.push(ivisaur);
+        pokeImgs.push(imageIvisaur);
     });
 
     //3
@@ -73,8 +81,10 @@ function setup() {
       .then(response => response.json())
       .then(data => {
         venusaur = data
-        imageVenusaur = loadImage(venusaur.sprites.front_default)
-        console.log(venusaur.name);
+        imageVenusaur = loadImage(venusaur.sprites.front_default);
+
+        pokes.push(venusaur);
+        pokeImgs.push(imageVenusaur);
     });
 
     //4
@@ -84,7 +94,9 @@ function setup() {
       .then(data => {
         charmander = data
         imageCharmander = loadImage(charmander.sprites.front_default)
-        console.log(charmander.name);
+        
+        pokes.push(charmander);
+        pokeImgs.push(imageCharmander);
     });
 
     //5
@@ -94,7 +106,9 @@ function setup() {
       .then(data => {
         charmeleon = data
         imageCharmeleon = loadImage(charmeleon.sprites.front_default)
-        console.log(charmeleon.name);
+        
+        pokes.push(charmeleon);
+        pokeImgs.push(imageCharmeleon);
     });
 
     //6
@@ -104,7 +118,9 @@ function setup() {
       .then(data => {
         charizard = data
         imageCharizard = loadImage(charizard.sprites.front_default)
-        console.log(charizard.name);
+       
+        pokes.push(charizard);
+        pokeImgs.push(imageCharizard);
     });
 
     //7 
@@ -114,7 +130,9 @@ function setup() {
       .then(data => {
         squirtle = data
         imageSquirtle = loadImage(squirtle.sprites.front_default)
-        console.log(squirtle.name);
+        
+        pokes.push(squirtle);
+        pokeImgs.push(imageSquirtle);
     });
 
     //8
@@ -124,7 +142,9 @@ function setup() {
       .then(data => {
         wartortle = data
         imageWartortle = loadImage(wartortle.sprites.front_default)
-        console.log(wartortle.name);
+        
+        pokes.push(wartortle);
+        pokeImgs.push(imageWartortle);
     });
     
     //9 
@@ -134,31 +154,53 @@ function setup() {
       .then(data => {
         blastoise = data
         imageBlastoise = loadImage(blastoise.sprites.front_default)
-        console.log(blastoise.name);
+        
+        pokes.push(blastoise);
+        pokeImgs.push(imageBlastoise);
     });
+
+    pokes.reverse();
+    pokeImgs.reverse();
     
 }
 
 function draw() {
-    //background(0, 50);
     background(0);
-    // newCursor();
-    textSize(50);
-    text(bulbasaur.name, 50, 50, 300);
-    image(imageBulbasaur, 50, 50, 500, 500);
-    
+    textSize(40);
+    text(namep, 300, 80, 500);
+    text(weight, 300, 160, 300);
+    text(abilities, 300, 240, 500);
+
+    textSize(15);
+    for(let i = 0; i < pokes.length; i++){
+      if(pokes[i]!=null){
+        text(pokes[i].name, 140, i*80+40, 80);
+        image(pokeImgs[i], 50, i*80 , 80, 80);
+      }
+    }
+
+    newCursor();    
 }
 
 function mouseClicked(){
-
+  for(let i = 0; i < pokes.length; i++){
+    if(mouseX > 50 && mouseX < 130 && mouseY > i*80 && mouseY < (i*80)+80){
+      namep = 'Name: '+ pokes[i].name;
+      weight = 'Weight: ' + pokes[i].weight;
+      abilities = 'Abilities: \n';
+      for(let j = 0; j < pokes[i].abilities.length; j ++){
+        abilities += ' - ' + pokes[i].abilities[j].ability.name + '\n';
+      }
+    }
+  }
 }
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
 
-// function newCursor() {
-//     noStroke();
-//     fill(255);
-//     ellipse(pmouseX, pmouseY, 10, 10);
-// }
+function newCursor() {
+    noStroke();
+    fill(255);
+    ellipse(pmouseX, pmouseY, 10, 10);
+}
